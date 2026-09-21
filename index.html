@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Votre cabinet, en 3 minutes — MouaDev</title>
+<meta name="description" content="Questionnaire pour les médecins au Maroc : outils de gestion, prise de rendez-vous, besoins et présence digitale.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Karla:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&display=swap">
+<style>
+  :root{
+    --bg:#F6FAFB; --surface:#FFFFFF; --ink:#0B2E3A; --ink-2:#4B6570; --ink-3:#8AA0A8;
+    --line:#D9E6E9; --accent:#0F766E; --accent-ink:#FFFFFF; --accent-soft:#D6EEEA; --accent-soft-2:#EAF5F3;
+    --danger:#B4423A; --radius:10px;
+    --font:"Karla",system-ui,-apple-system,"Segoe UI",sans-serif;
+    --serif:"Source Serif 4",Georgia,"Times New Roman",serif;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font);font-size:17px;line-height:1.5;-webkit-font-smoothing:antialiased}
+  button,input,select,textarea{font:inherit;color:inherit}
+  a{color:var(--accent)}
+
+  .top{position:fixed;inset:0 0 auto 0;height:4px;background:var(--line);z-index:5}
+  .top > i{display:block;height:100%;width:0;background:var(--accent);transition:width .35s ease}
+  header{display:flex;align-items:center;justify-content:space-between;padding:26px 24px 0;max-width:720px;margin:0 auto}
+  .brand{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:.02em;text-decoration:none;color:var(--ink)}
+  .brand b{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:8px;background:var(--accent);color:#fff;font-weight:700;font-size:14px}
+  .brand span{font-size:15px}
+  .step{font-size:13px;color:var(--ink-3);font-variant-numeric:tabular-nums;letter-spacing:.04em;text-transform:uppercase}
+
+  main{max-width:720px;margin:0 auto;padding:48px 24px 140px;min-height:calc(100% - 60px)}
+  .screen{animation:in .32s ease both}
+  @keyframes in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+  @media (prefers-reduced-motion:reduce){.screen{animation:none}.top>i{transition:none}}
+
+  .eyebrow{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);font-weight:700;margin:0 0 12px}
+  h1{font-family:var(--serif);font-weight:600;font-size:clamp(28px,4.5vw,38px);line-height:1.15;margin:0 0 14px;text-wrap:balance;letter-spacing:-.01em}
+  h2{font-family:var(--serif);font-weight:600;font-size:clamp(22px,3.5vw,28px);line-height:1.25;margin:0 0 8px;text-wrap:balance}
+  .hint{color:var(--ink-2);margin:0 0 26px;font-size:15px}
+  .lead{color:var(--ink-2);font-size:17px;max-width:56ch;margin:0 0 30px}
+  .req{color:var(--danger);font-weight:700}
+
+  .opts{display:grid;gap:8px;margin:0 0 8px}
+  .opts.two{grid-template-columns:1fr 1fr}
+  @media (max-width:520px){.opts.two{grid-template-columns:1fr}}
+  .opt{display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:13px 14px;border:1.5px solid var(--line);background:var(--surface);border-radius:var(--radius);cursor:pointer;transition:border-color .12s,background .12s}
+  .opt:hover{border-color:var(--accent)}
+  .opt:focus-visible,.field:focus-visible,.btn:focus-visible,.scale button:focus-visible{outline:3px solid var(--accent-soft);outline-offset:1px;border-color:var(--accent)}
+  .opt .k{flex:none;width:24px;height:24px;border:1.5px solid var(--line);border-radius:6px;display:grid;place-items:center;font-size:12px;font-weight:700;color:var(--ink-3);background:var(--bg)}
+  .opt.on{border-color:var(--accent);background:var(--accent-soft-2)}
+  .opt.on .k{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .opt .t{flex:1}
+
+  .field{width:100%;padding:14px 16px;border:1.5px solid var(--line);border-radius:var(--radius);background:var(--surface);font-size:18px}
+  .field::placeholder{color:var(--ink-3)}
+  textarea.field{min-height:140px;resize:vertical;font-size:17px}
+  select.field{appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%234B6570' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:44px}
+  .art{width:120px;height:100px;display:block;margin:0 0 18px}
+  .pills{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:8px}
+  .pill{display:inline-flex;align-items:center;gap:8px;padding:9px 16px 9px 12px;border:1.5px solid var(--line);background:var(--surface);border-radius:999px;cursor:pointer;font-size:15px;font-weight:500;color:var(--ink);transition:border-color .12s,background .12s}
+  .pill svg{width:18px;height:18px;color:var(--accent)}
+  .pill:hover{border-color:var(--accent)}
+  .pill:focus-visible{outline:3px solid var(--accent-soft);outline-offset:1px}
+  .pill.on{background:var(--accent);border-color:var(--accent);color:#fff}
+  .pill.on svg{color:#fff}
+  .other{margin-top:10px}
+  .other[hidden]{display:none}
+  .phone{display:flex;gap:8px}
+  .phone .cc{flex:none;width:92px;text-align:center}
+
+  .scale{display:grid;grid-template-columns:repeat(10,1fr);gap:6px;margin-bottom:8px}
+  .scale button{padding:14px 0;border:1.5px solid var(--line);background:var(--surface);border-radius:8px;cursor:pointer;font-weight:600;font-variant-numeric:tabular-nums}
+  .scale button:hover{border-color:var(--accent)}
+  .scale button.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .scale-l{display:flex;justify-content:space-between;font-size:13px;color:var(--ink-3)}
+  @media (max-width:520px){.scale{grid-template-columns:repeat(5,1fr)}}
+
+  .err{color:var(--danger);font-size:14px;margin-top:10px;min-height:20px}
+
+  .bar{position:fixed;left:0;right:0;bottom:0;background:linear-gradient(to top,var(--bg) 70%,transparent);padding:18px 24px calc(18px + env(safe-area-inset-bottom,0px))}
+  .bar .in{max-width:720px;margin:0 auto;display:flex;align-items:center;gap:12px}
+  .btn{display:inline-flex;align-items:center;gap:8px;padding:13px 22px;border-radius:var(--radius);border:1.5px solid var(--accent);background:var(--accent);color:var(--accent-ink);font-weight:700;cursor:pointer;font-size:16px}
+  .btn:hover{filter:brightness(1.06)}
+  .btn:disabled{opacity:.6;cursor:default}
+  .btn.ghost{background:transparent;color:var(--ink-2);border-color:var(--line);padding:13px 16px}
+  .kbd{font-size:13px;color:var(--ink-3);margin-left:auto}
+  .kbd b{display:inline-block;border:1px solid var(--line);border-radius:4px;padding:0 6px;font-weight:600;background:var(--surface)}
+  @media (max-width:520px){.kbd{display:none}}
+
+  .done{text-align:center;padding-top:40px}
+  .done .ok{width:64px;height:64px;border-radius:50%;background:var(--accent-soft);display:grid;place-items:center;margin:0 auto 22px;color:var(--accent)}
+  .meta{display:flex;gap:18px;flex-wrap:wrap;color:var(--ink-2);font-size:14px;margin-bottom:30px}
+  .meta span{display:inline-flex;align-items:center;gap:6px}
+</style>
+</head>
+<body>
+
+<div class="top"><i id="prog"></i></div>
+<header>
+  <span></span>
+  <div class="step" id="stepLabel"></div>
+</header>
+<main id="main"></main>
+<div class="bar" id="bar"></div>
+
+<script>
+/* ============================================================
+   CONFIGURATION — remplace l'URL ci-dessous par celle de ton
+   script Google Apps Script (voir README).
+   ============================================================ */
+const SHEET_URL = "https://script.google.com/macros/s/AKfycbwwtksXTtIPDtW1-PDCo0YHFhcNIzrSdrU5kPwSkbg8ldKmeoCImhOouVRe_8FZwhzx/exec";
+const SITE_URL  = "https://mouadev.com";
+const SOURCE    = new URLSearchParams(location.search).get("source") || "direct";
+
+/* ------------------------------------------------------------
+   QUESTIONS
+   types : text | select | single | multi | scale | long | phone | email
+   showIf(a) : fonction facultative, a = réponses déjà données
+   ------------------------------------------------------------ */
+const Q = [
+  { id:"nom", section:"Vous et votre cabinet", type:"text", req:true,
+    q:"Votre nom complet", ph:"Dr. Prénom Nom" },
+
+  { id:"specialite", section:"Vous et votre cabinet", type:"pills", req:true,
+    q:"Votre spécialité",
+    o:["Médecine générale","Pédiatrie","Gynécologie-obstétrique","Dermatologie","Cardiologie","Ophtalmologie","ORL","Chirurgie dentaire","Orthopédie / Traumatologie","Psychiatrie / Psychologie","Radiologie","Gastro-entérologie","Endocrinologie / Diabétologie","Kinésithérapie","Autre"],
+    icons:["stetho","baby","female","skin","heart","eye","ear","tooth","bone","brain","scan","stomach","drop","body","plus"] },
+
+  { id:"ville", section:"Vous et votre cabinet", type:"pills", req:true,
+    q:"Dans quelle ville exercez-vous ?",
+    o:["Casablanca","Rabat","Salé","Marrakech","Fès","Tanger","Agadir","Meknès","Oujda","Kénitra","Tétouan","El Jadida","Mohammedia","Autre"],
+    icons:"pin" },
+
+  { id:"structure", section:"Vous et votre cabinet", type:"single",
+    q:"Type de structure",
+    o:["Cabinet individuel","Cabinet de groupe (plusieurs praticiens)","Clinique privée","Centre médical / polyclinique","Autre"] },
+
+  { id:"patients_jour", section:"Vous et votre cabinet", type:"single", cols:2,
+    q:"Combien de patients recevez-vous en moyenne par jour ?",
+    o:["Moins de 10","10 à 20","20 à 40","Plus de 40"] },
+
+  { id:"logiciel_gestion", section:"Vos outils actuels", type:"multi", cols:2,
+    q:"Quel logiciel utilisez-vous pour la gestion du cabinet ?",
+    hint:"Dossiers patients, agenda, facturation. Plusieurs réponses possibles.",
+    o:["Dentisto","PratiSoft","TabibDoc","Nabady","Logiciel sur mesure","Excel / Word","Papier uniquement","Aucun logiciel","Autre"] },
+
+  { id:"prise_rdv", section:"Vos outils actuels", type:"multi", cols:2,
+    q:"Comment vos patients prennent-ils rendez-vous ?",
+    hint:"Plusieurs réponses possibles.",
+    o:["DabaDoc","Par téléphone (secrétaire)","Par WhatsApp","Google Agenda","Module de mon logiciel de gestion","Via mon site web","Sans rendez-vous (ordre d'arrivée)","Autre"] },
+
+  { id:"anciennete", section:"Vos outils actuels", type:"single",
+    q:"Depuis combien de temps utilisez-vous ces outils ?",
+    o:["Moins de 6 mois","6 mois à 1 an","1 à 3 ans","Plus de 3 ans","Je n'utilise aucun outil numérique"] },
+
+  { id:"satisfaction", section:"Vos outils actuels", type:"scale",
+    q:"Quel est votre niveau de satisfaction avec vos outils actuels ?",
+    lo:"Pas du tout satisfait", hi:"Très satisfait",
+    showIf:a => a.anciennete !== "Je n'utilise aucun outil numérique" },
+
+  { id:"problemes", section:"Problèmes rencontrés", type:"multi", cols:2,
+    q:"Quels problèmes rencontrez-vous avec vos outils actuels ?",
+    hint:"Plusieurs réponses possibles.",
+    o:["Trop cher","Compliqué à utiliser","Support peu réactif","Pas d'application mobile","Rendez-vous manqués","Pas de rappels SMS / WhatsApp","Dossier patient difficile à retrouver","Facturation compliquée","Pas d'ordonnance électronique","Données non sécurisées","Ne fonctionne pas hors ligne","Aucun problème","Autre"],
+    showIf:a => a.anciennete !== "Je n'utilise aucun outil numérique" },
+
+  { id:"perte_temps", section:"Problèmes rencontrés", type:"long",
+    q:"Quel est LE problème qui vous fait perdre le plus de temps chaque semaine ?",
+    ph:"Ex. : les patients qui ne viennent pas, la gestion des appels, retrouver un ancien dossier…" },
+
+  { id:"fonctionnalites", section:"Ce que vous aimeriez avoir", type:"multi", cols:2, max:5,
+    q:"Quelles fonctionnalités vous aideraient vraiment au quotidien ?",
+    hint:"Choisissez jusqu'à 5 réponses.",
+    o:["Rappels WhatsApp / SMS","Rendez-vous en ligne sur mon site","Dossier patient numérique","Ordonnance électronique","Facturation automatique","Tableau de bord","Multi-praticiens / multi-cabinets","Application mobile","Espace patient","Avis Google automatiques","Sauvegarde cloud","Téléconsultation","Autre"] },
+
+
+  { id:"paiement", section:"Budget actuel", type:"single", cols:2,
+    q:"Comment payez-vous vos outils actuels ?",
+    o:["Abonnement mensuel","Abonnement trimestriel","Abonnement annuel","Achat unique (licence)","Gratuit","Je ne paie rien (pas d'outil)"] },
+
+  { id:"cout_mensuel", section:"Budget actuel", type:"single", cols:2,
+    q:"Combien cela vous coûte-t-il aujourd'hui, environ, par mois ?",
+    hint:"Si vous payez par trimestre ou par an, ramenez au mensuel.",
+    o:["Moins de 200 DH","200 à 500 DH","500 à 1 000 DH","1 000 à 2 000 DH","Plus de 2 000 DH","Je ne sais pas exactement"],
+    showIf:a => a.paiement && a.paiement !== "Gratuit" && a.paiement !== "Je ne paie rien (pas d'outil)" },
+
+  { id:"site_web", section:"Votre présence digitale", type:"single",
+    q:"Avez-vous un site web pour votre cabinet ?",
+    o:["Oui, et il est à jour","Oui, mais il est ancien / pas à jour","Non, mais j'y pense","Non, ce n'est pas une priorité"] },
+
+
+  { id:"google_fiche", section:"Votre présence digitale", type:"single",
+    q:"Avez-vous une fiche Google (Google Business Profile) avec des avis patients ?",
+    o:["Oui, avec des avis récents","Oui, mais peu ou pas d'avis","Je ne sais pas","Non"] },
+
+
+  { id:"budget_digital", section:"Votre présence digitale", type:"single",
+    q:"Quel budget mensuel seriez-vous prêt à consacrer à votre présence digitale ?",
+    o:["Un montant mensuel (à préciser)","Je préfère un paiement unique (projet)","Je ne sais pas encore"],
+    other:"Un montant mensuel (à préciser)", otherPh:"Ex. : 2 000 DH / mois" },
+
+  { id:"whatsapp", section:"Contact", type:"phone", req:true,
+    q:"Votre numéro WhatsApp", ph:"6 12 34 56 78" },
+
+  { id:"email", section:"Contact", type:"email",
+    q:"Votre adresse email", hint:"Facultatif.", ph:"docteur@exemple.ma" },
+
+  { id:"recontact", section:"Contact", type:"single", cols:2,
+    q:"Souhaitez-vous être recontacté(e) pour un échange gratuit de 15 minutes sur votre cabinet ?",
+    o:["Oui, avec plaisir","Non, pas pour le moment"] },
+];
+
+/* ------------------------------------------------------------
+   ICÔNES (traits, 24x24) — pour les pills
+   ------------------------------------------------------------ */
+const I = {
+  stetho:'<path d="M4.8 2.3A.3.3 0 1 0 5 2H4a2 2 0 0 0-2 2v5a6 6 0 0 0 12 0V4a2 2 0 0 0-2-2h-1a.2.2 0 1 0 .3.3"/><path d="M8 15v1a6 6 0 0 0 6 6 6 6 0 0 0 6-6v-4"/><circle cx="20" cy="10" r="2"/>',
+  baby:'<path d="M9 12h.01M15 12h.01M10 16c.5.3 1.2.5 2 .5s1.5-.2 2-.5"/><path d="M19 6.3a9 9 0 0 1 1.8 3.9 2 2 0 0 1 0 3.6 9 9 0 0 1-17.6 0 2 2 0 0 1 0-3.6A9 9 0 0 1 12 3c2 0 3.5 1.1 3.5 2.5s-.9 2-2 2c-1 0-2.5-.4-2.5-1.2"/>',
+  female:'<circle cx="12" cy="8" r="5"/><path d="M12 13v8M9 18h6"/>',
+  skin:'<path d="M3 12c3-4 6-4 9 0s6 4 9 0"/><path d="M3 6c3-4 6-4 9 0s6 4 9 0M3 18c3-4 6-4 9 0s6 4 9 0"/>',
+  heart:'<path d="M19 14c1.5-1.5 3-3.2 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.8 0-3 .5-4.5 2-1.5-1.5-2.7-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4 3 5.5l7 7z"/><path d="M3.2 12h4.3l1.5-3 3 6 1.5-3h4.3"/>',
+  eye:'<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>',
+  ear:'<path d="M6 8.5a6.5 6.5 0 0 1 13 0c0 6-6 6-6 10a3.5 3.5 0 1 1-7 0"/><path d="M15 8.5a2.5 2.5 0 0 0-5 0v1a2 2 0 1 1 0 4"/>',
+  tooth:'<path d="M9.3 3.5C7.5 2.7 5 3.4 4.3 5.6c-.9 2.7.8 5.5 1.5 8.1.6 2.4.6 5.2 2 7.1.6.8 1.7.5 2-.4.6-1.7.6-4.5 2.2-4.5s1.6 2.8 2.2 4.5c.3.9 1.4 1.2 2 .4 1.4-1.9 1.4-4.7 2-7.1.7-2.6 2.4-5.4 1.5-8.1-.7-2.2-3.2-2.9-5-2.1-1 .4-1.6.7-2.7.7s-1.7-.3-2.7-.7z"/>',
+  bone:'<path d="M17 10c.7-.7 1.5-1 2.5-1a2.5 2.5 0 1 0-2.4-3.5A2.5 2.5 0 1 0 14 8c0 1-.3 1.8-1 2.5l-2.5 2.5c-.7.7-1.5 1-2.5 1a2.5 2.5 0 1 0 2.4 3.5A2.5 2.5 0 1 0 10 16c0-1 .3-1.8 1-2.5z"/>',
+  brain:'<path d="M12 5a3 3 0 1 0-5.9 1A3 3 0 0 0 5 11.5a3 3 0 0 0 1 5.8A3 3 0 1 0 12 19z"/><path d="M12 5a3 3 0 1 1 5.9 1 3 3 0 0 1 1.1 5.5 3 3 0 0 1-1 5.8A3 3 0 1 1 12 19z"/><path d="M12 5v14"/>',
+  scan:'<path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2"/><path d="M7 12h10M12 8v8"/>',
+  stomach:'<path d="M8 3v4a5 5 0 0 0 5 5h1a5 5 0 0 1 0 10h-1a6 6 0 0 1-6-6v-1"/><path d="M13 3v3"/>',
+  drop:'<path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5S12.5 6 12 2c-.5 4-2 5.9-4 7.5S5 13 5 15a7 7 0 0 0 7 7z"/>',
+  body:'<circle cx="12" cy="4" r="2"/><path d="M12 6v7M12 13l-3 8M12 13l3 8M7 9l5-2 5 2"/>',
+  plus:'<path d="M12 5v14M5 12h14"/>',
+  pin:'<path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/>',
+};
+const ico = n => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${I[n]||I.plus}</svg>`;
+
+/* ------------------------------------------------------------
+   ILLUSTRATIONS — une par section (inline SVG, 2 tons)
+   ------------------------------------------------------------ */
+const ART = {
+  "Vous et votre cabinet": '<rect x="14" y="26" width="92" height="64" rx="6" fill="var(--accent-soft)"/><rect x="26" y="38" width="68" height="40" rx="4" fill="#fff" stroke="var(--accent)" stroke-width="2"/><path d="M60 46v24M48 58h24" stroke="var(--accent)" stroke-width="4" stroke-linecap="round"/><path d="M40 90h40" stroke="var(--accent)" stroke-width="2" stroke-linecap="round"/><circle cx="96" cy="26" r="8" fill="var(--accent)"/>',
+  "Vos outils actuels": '<rect x="16" y="22" width="88" height="60" rx="6" fill="var(--accent-soft)"/><rect x="24" y="30" width="72" height="44" rx="3" fill="#fff" stroke="var(--accent)" stroke-width="2"/><path d="M32 40h22M32 48h40M32 56h30M32 64h44" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round" opacity=".7"/><path d="M48 90h24" stroke="var(--accent)" stroke-width="3" stroke-linecap="round"/><path d="M60 82v8" stroke="var(--accent)" stroke-width="3"/>',
+  "Problèmes rencontrés": '<circle cx="60" cy="58" r="34" fill="var(--accent-soft)"/><path d="M60 24 26 82h68z" fill="#fff" stroke="var(--accent)" stroke-width="2.5" stroke-linejoin="round"/><path d="M60 46v16" stroke="var(--accent)" stroke-width="4" stroke-linecap="round"/><circle cx="60" cy="71" r="2.5" fill="var(--accent)"/>',
+  "Ce que vous aimeriez avoir": '<circle cx="60" cy="56" r="34" fill="var(--accent-soft)"/><path d="M60 26c-9 0-16 7-16 16 0 7 4 10 6 14v4h20v-4c2-4 6-7 6-14 0-9-7-16-16-16z" fill="#fff" stroke="var(--accent)" stroke-width="2.5"/><path d="M52 66h16M54 72h12" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round"/><path d="M60 14v6M36 24l4 4M84 24l-4 4" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round"/>',
+  "Budget actuel": '<rect x="18" y="34" width="84" height="52" rx="8" fill="var(--accent-soft)"/><rect x="26" y="42" width="68" height="36" rx="4" fill="#fff" stroke="var(--accent)" stroke-width="2"/><circle cx="60" cy="60" r="9" fill="none" stroke="var(--accent)" stroke-width="2.5"/><text x="60" y="64" text-anchor="middle" font-family="Karla,sans-serif" font-weight="700" font-size="11" fill="var(--accent)">DH</text><path d="M34 60h6M80 60h6" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round"/>',
+  "Votre présence digitale": '<circle cx="60" cy="56" r="34" fill="var(--accent-soft)"/><circle cx="60" cy="56" r="22" fill="#fff" stroke="var(--accent)" stroke-width="2.5"/><path d="M38 56h44M60 34c-8 8-8 36 0 44M60 34c8 8 8 36 0 44" stroke="var(--accent)" stroke-width="2" fill="none"/><circle cx="90" cy="30" r="8" fill="var(--accent)"/><path d="M87 30l2 2 4-4" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>',
+  "Contact": '<rect x="20" y="30" width="80" height="56" rx="8" fill="var(--accent-soft)"/><rect x="28" y="38" width="64" height="40" rx="4" fill="#fff" stroke="var(--accent)" stroke-width="2"/><path d="M28 42l32 22 32-22" stroke="var(--accent)" stroke-width="2.5" fill="none" stroke-linejoin="round"/><circle cx="96" cy="32" r="9" fill="var(--accent)"/><path d="M92.5 32.5l2.5 2.5 4.5-4.5" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>',
+};
+const art = s => `<svg class="art" viewBox="0 0 120 100" aria-hidden="true">${ART[s]||""}</svg>`;
+
+/* ------------------------------------------------------------ */
+const A = {};            // réponses
+let i = -1;              // -1 = accueil, Q.length = fin
+let lastId = null;
+const main = document.getElementById("main");
+const bar  = document.getElementById("bar");
+const prog = document.getElementById("prog");
+const stepLabel = document.getElementById("stepLabel");
+const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const visible = () => Q.filter(q => !q.showIf || q.showIf(A));
+
+function render(){
+  if (i < 0) return welcome();
+  if (i >= Q.length) return finish();
+  const q = Q[i];
+  if (q.showIf && !q.showIf(A)) { i += dir; return render(); }
+  const vis = visible(); const n = vis.indexOf(q) + 1;
+  prog.style.width = (n / vis.length * 100) + "%";
+  stepLabel.textContent = `${n} / ${vis.length}`;
+
+  let body = "";
+  const v = A[q.id];
+  const OL = q.other || "Autre";
+  const other = q.o && q.o.includes(OL);
+  const otherVal = A[q.id + "_autre"] || "";
+  const otherOn = q.type === "multi" ? (v||[]).includes(OL) : v === OL;
+
+  if (q.type === "text" || q.type === "email")
+    body = `<input class="field" id="f_${q.id}" type="${q.type}" placeholder="${esc(q.ph||"")}" value="${esc(v||"")}" autocomplete="${q.type==="email"?"email":"name"}">`;
+  else if (q.type === "long")
+    body = `<textarea class="field" id="f_${q.id}" placeholder="${esc(q.ph||"")}">${esc(v||"")}</textarea>`;
+  else if (q.type === "phone")
+    body = `<div class="phone"><input class="field cc" id="cc" value="+212" aria-label="Indicatif"><input class="field" id="f_${q.id}" type="tel" inputmode="tel" placeholder="${esc(q.ph||"")}" value="${esc(v||"")}" autocomplete="tel-national"></div>`;
+  else if (q.type === "select")
+    body = `<select class="field" id="f_${q.id}"><option value="">Choisir…</option>${q.o.map(o=>`<option ${v===o?"selected":""}>${esc(o)}</option>`).join("")}</select>`;
+  else if (q.type === "pills")
+    body = `<div class="pills" role="radiogroup">${q.o.map((o,k)=>{
+      const ic = Array.isArray(q.icons) ? q.icons[k] : q.icons;
+      return `<button type="button" class="pill ${v===o?"on":""}" data-o="${esc(o)}" role="radio" aria-checked="${v===o}">${ico(ic)}<span>${esc(o)}</span></button>`;}).join("")}</div>`;
+  else if (q.type === "single" || q.type === "multi")
+    body = `<div class="opts ${q.cols===2?"two":""}" role="${q.type==="single"?"radiogroup":"group"}">${q.o.map((o,k)=>{
+      const on = q.type==="multi" ? (v||[]).includes(o) : v===o;
+      return `<button type="button" class="opt ${on?"on":""}" data-o="${esc(o)}" role="${q.type==="single"?"radio":"checkbox"}" aria-checked="${on}"><span class="k">${String.fromCharCode(65+k)}</span><span class="t">${esc(o)}</span></button>`;}).join("")}</div>`;
+  else if (q.type === "scale")
+    body = `<div class="scale">${[1,2,3,4,5,6,7,8,9,10].map(n=>`<button type="button" class="${v===n?"on":""}" data-n="${n}">${n}</button>`).join("")}</div><div class="scale-l"><span>${esc(q.lo)}</span><span>${esc(q.hi)}</span></div>`;
+
+  if (other) body += `<input class="other field" id="f_${q.id}_autre" placeholder="${esc(q.otherPh||"Précisez…")}" value="${esc(otherVal)}" ${otherOn?"":"hidden"}>`;
+
+  const anim = lastId !== q.id; lastId = q.id;
+  main.innerHTML = `<section class="${anim?"screen":""}">
+    ${art(q.section)}
+    <p class="eyebrow">${esc(q.section)}</p>
+    <h2>${esc(q.q)} ${q.req?'<span class="req" title="Obligatoire">*</span>':""}</h2>
+    <p class="hint">${esc(q.hint || (q.req ? "" : "Facultatif."))}</p>
+    ${body}<div class="err" id="err"></div></section>`;
+
+  bar.innerHTML = `<div class="in">
+    <button class="btn ghost" id="back">← Retour</button>
+    <button class="btn" id="next">${i === Q.length-1 ? "Envoyer" : "Suivant"}</button>
+    <span class="kbd">Entrée <b>↵</b> pour continuer</span></div>`;
+
+  // listeners
+  main.querySelectorAll(".opt, .pill").forEach(b => b.addEventListener("click", () => {
+    const o = b.dataset.o;
+    if (q.type === "single" || q.type === "pills") { A[q.id] = o; if (o !== OL) setTimeout(next, 180); render(); }
+    else {
+      let arr = (A[q.id] || []).slice();
+      if (arr.includes(o)) arr = arr.filter(x => x !== o);
+      else { if (q.max && arr.length >= q.max) { err(`Maximum ${q.max} réponses.`); return; } arr.push(o); }
+      A[q.id] = arr; render();
+    }
+  }));
+  main.querySelectorAll(".scale button").forEach(b => b.addEventListener("click", () => { A[q.id] = +b.dataset.n; render(); setTimeout(next, 180); }));
+  const f = document.getElementById("f_"+q.id);
+  if (f) { f.addEventListener("input", () => A[q.id] = f.value.trim()); if (q.type === "select") f.addEventListener("change", () => { A[q.id] = f.value; render(); }); if (["text","email","phone","select"].includes(q.type)) f.focus(); }
+  const fo = document.getElementById("f_"+q.id+"_autre");
+  if (fo) { fo.addEventListener("input", () => A[q.id+"_autre"] = fo.value.trim()); if (otherOn && !otherVal) fo.focus(); }
+  const cc = document.getElementById("cc"); if (cc) cc.addEventListener("input", () => A.indicatif = cc.value.trim());
+  document.getElementById("back").onclick = back;
+  document.getElementById("next").onclick = next;
+}
+
+function err(m){ const e = document.getElementById("err"); if (e) e.textContent = m; }
+function validate(){
+  const q = Q[i]; const v = A[q.id];
+  const empty = v == null || v === "" || (Array.isArray(v) && !v.length);
+  if (q.req && empty) return "Cette réponse est obligatoire.";
+  if (q.type === "email" && v && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) return "Adresse email invalide.";
+  if (q.type === "phone" && v && v.replace(/\D/g,"").length < 8) return "Numéro incomplet.";
+  const OL = q.other || "Autre";
+  const isOther = q.type === "multi" ? (v||[]).includes(OL) : v === OL;
+  if (isOther && !A[q.id+"_autre"]) return q.other ? "Merci d'indiquer un montant." : "Merci de préciser « Autre ».";
+  return "";
+}
+let dir = 1;
+function next(){ if (i >= 0 && i < Q.length) { const m = validate(); if (m) return err(m); } dir = 1; i++; if (i >= Q.length) return submit(); render(); window.scrollTo({top:0}); }
+function back(){ dir = -1; i--; render(); window.scrollTo({top:0}); }
+
+document.addEventListener("keydown", e => {
+  if (e.key !== "Enter" || e.shiftKey || e.target.tagName === "TEXTAREA") return;
+  if (i < 0 || i >= Q.length) return; e.preventDefault(); next();
+});
+
+function welcome(){
+  prog.style.width = "0%"; stepLabel.textContent = "";
+  main.innerHTML = `<section class="screen">
+    ${art("Vous et votre cabinet")}
+    <p class="eyebrow">Médecins · Maroc</p>
+    <h1>Votre cabinet, en 3 minutes</h1>
+    <p class="lead">Nous accompagnons des médecins au Maroc dans leur présence digitale : site web, référencement Google, vidéos et réseaux sociaux. Ce court questionnaire nous aide à comprendre vos outils actuels et vos besoins réels.</p>
+    <div class="meta"><span>⏱ 3 minutes</span><span>🔒 Réponses confidentielles</span><span>${visible().length} questions</span></div>
+    <button class="btn" id="start">Commencer →</button></section>`;
+  bar.innerHTML = "";
+  document.getElementById("start").onclick = next;
+}
+
+async function submit(){
+  prog.style.width = "100%"; stepLabel.textContent = "";
+  bar.innerHTML = "";
+  main.innerHTML = `<section class="screen done"><h2>Envoi en cours…</h2><p class="hint">Merci de patienter une seconde.</p></section>`;
+  const payload = { date: new Date().toISOString(), source: SOURCE, indicatif: A.indicatif || "+212" };
+  Q.forEach(q => { let v = A[q.id]; if (Array.isArray(v)) v = v.join(" ; "); payload[q.id] = v ?? ""; if (A[q.id+"_autre"]) payload[q.id+"_autre"] = A[q.id+"_autre"]; });
+  try {
+    if (!SHEET_URL.startsWith("http")) throw new Error("no-url");
+    await fetch(SHEET_URL, { method:"POST", mode:"no-cors", headers:{"Content-Type":"text/plain;charset=utf-8"}, body: JSON.stringify(payload) });
+    finish();
+  } catch(e) {
+    main.innerHTML = `<section class="screen done"><h2>Une erreur s'est produite</h2><p class="hint">Vos réponses n'ont pas pu être envoyées. Vérifiez votre connexion et réessayez.</p><button class="btn" id="retry">Réessayer</button></section>`;
+    document.getElementById("retry").onclick = submit;
+  }
+}
+function finish(){
+  main.innerHTML = `<section class="screen done">
+    <div class="ok"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>
+    <h1>Merci, Docteur.</h1>
+    <p class="lead" style="margin:0 auto 28px">Vos réponses ont bien été enregistrées. ${A.recontact==="Oui, avec plaisir" ? "Nous vous écrirons sur WhatsApp sous 48 h." : "Nous vous tiendrons informé(e) de nos prochains contenus."}</p>
+    </section>`;
+}
+render();
+</script>
+</body>
+</html>
