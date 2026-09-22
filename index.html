@@ -23,13 +23,13 @@
 
   .top{position:fixed;inset:0 0 auto 0;height:4px;background:var(--line);z-index:5}
   .top > i{display:block;height:100%;width:0;background:var(--accent);transition:width .35s ease}
-  header{display:flex;align-items:center;justify-content:space-between;padding:26px 24px 0;max-width:720px;margin:0 auto}
+  header{display:flex;align-items:center;justify-content:space-between;padding:12px 24px 0;max-width:720px;margin:0 auto}
   .brand{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:.02em;text-decoration:none;color:var(--ink)}
   .brand b{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:8px;background:var(--accent);color:#fff;font-weight:700;font-size:14px}
   .brand span{font-size:15px}
   .step{font-size:13px;color:var(--ink-3);font-variant-numeric:tabular-nums;letter-spacing:.04em;text-transform:uppercase}
 
-  main{max-width:720px;margin:0 auto;padding:48px 24px 140px;min-height:calc(100% - 60px)}
+  main{max-width:720px;margin:0 auto;padding:14px 24px 140px;min-height:calc(100% - 60px)}
   .screen{animation:in .32s ease both}
   @keyframes in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
   @media (prefers-reduced-motion:reduce){.screen{animation:none}.top>i{transition:none}}
@@ -56,7 +56,7 @@
   .field::placeholder{color:var(--ink-3)}
   textarea.field{min-height:140px;resize:vertical;font-size:17px}
   select.field{appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%234B6570' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:44px}
-  .art{width:120px;height:100px;display:block;margin:0 0 18px}
+  .art{width:104px;height:86px;display:block;margin:0 0 12px}
   .pills{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:8px}
   .pill{display:inline-flex;align-items:center;gap:8px;padding:9px 16px 9px 12px;border:1.5px solid var(--line);background:var(--surface);border-radius:999px;cursor:pointer;font-size:15px;font-weight:500;color:var(--ink);transition:border-color .12s,background .12s}
   .pill svg{width:18px;height:18px;color:var(--accent)}
@@ -88,7 +88,7 @@
   .kbd b{display:inline-block;border:1px solid var(--line);border-radius:4px;padding:0 6px;font-weight:600;background:var(--surface)}
   @media (max-width:520px){.kbd{display:none}}
 
-  .done{text-align:center;padding-top:40px}
+  .done{text-align:center;padding-top:16px}
   .done .ok{width:64px;height:64px;border-radius:50%;background:var(--accent-soft);display:grid;place-items:center;margin:0 auto 22px;color:var(--accent)}
   .meta{display:flex;gap:18px;flex-wrap:wrap;color:var(--ink-2);font-size:14px;margin-bottom:30px}
   .meta span{display:inline-flex;align-items:center;gap:6px}
